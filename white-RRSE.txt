@@ -1,0 +1,3 @@
+dataset: white metric: RRSE 
+model: mlpe RRSE:88.14309+-3.491925
+model: svm RRSE:85.25421+-1.826304
