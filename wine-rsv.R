@@ -27,13 +27,13 @@ heading <- c('fixed acidity',
 
 # dataset to crunch on this run
 #d <- whitetest
-d <- whitecomplete
-#d <- redcomplete
+#d <- whitecomplete
+d <- redcomplete
 
 # common name for this run
 #output_fn <- "whitetest"
-output_fn <- "whitecomplete"
-#output_fn <- "redcomplete"
+#output_fn <- "whitecomplete"
+output_fn <- "redcomplete"
 
 # drop any wines that have any missing lab data
 d <- na.omit(d)
@@ -50,7 +50,7 @@ MR <- mining(quality~., d, model="mr", Runs=20, method=v)
 savemining(MR, paste(output_fn, "-mr",sep=""));
 
 # Artificial Neural Network
-m <- c(3, 100, "kfold", 4, "RAE")
+m <- c(3, 100, "kfold", 4, "REC")
 s <- seq(1, 6, 1)
 NN=mining(quality~., d, model='mlpe', Runs=20, method=v, mpar=m, search=s, feat="s")
 savemining(NN, paste(output_fn, "-nn",sep=""))
@@ -78,6 +78,23 @@ NN <- loadmining(paste(datafiles, "-nn", sep=""))
 ANN <- loadmining(paste(datafiles, "-ann", sep=""))
 MR <- loadmining(paste(datafiles, "-mr", sep=""))
 
+summary(SV)
+# Mean Absolute Deviation for each
+T <- fit (quality~., d, model="svm", mpar=m, search=s)
+I=Importance(T,d,method="SA") # 1-D SA, AAD
+summary(I$value)
+
+T <- fit (quality~., d, model="mlp", mpar=m, search=s)
+I=Importance(T,d,method="SA") # 1-D SA, AAD
+summary(I$value)
+
+T <- fit (quality~., d, model="mlpe", mpar=m, search=s)
+I=Importance(T,d,method="SA") # 1-D SA, AAD
+summary(I$value)
+
+T <- fit (quality~., d, model="mr", mpar=m, search=s)
+I=Importance(T,d,method="SA") # 1-D SA, AAD
+summary(I$value)
 # output to console
 sink()
 
