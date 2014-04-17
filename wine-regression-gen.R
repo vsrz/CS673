@@ -3,8 +3,8 @@ library (rminer)
 
 # 1599 different red wines
 red_dataset <- read.table("winequality-red.csv",sep=";",header=TRUE)
-#d <- red_dataset
-#filename <- "RedWine"
+d <- red_dataset
+filename <- "RedWine"
 
 # 4898 different white wines
 white_dataset <- read.table("winequality-white.csv",sep=';', header=TRUE)
@@ -13,22 +13,22 @@ white_dataset <- read.table("winequality-white.csv",sep=';', header=TRUE)
 
 # 100 different white wines
 short_dataset <- read.table("winequality-white-t.csv",sep=';', header=TRUE)
-d <- short_dataset
-filename <- "ShortWine"
+#d <- short_dataset
+#filename <- "ShortWine"
 
 ################################################################################
 # Data mining for each MR, NN, and SVM
 #
 method    <- c("kfold", 5)
 model     <- "mr"
-Runs      <- 10
+Runs      <- 20
 
 # MR
 MR        <- mining( quality~., d, model=model, Runs=Runs, method=method )
 
 # NN
 mpar      <- c( 3, 100, "kfold", 4, "RAE" )
-search    <- seq( 1, 6, 1 )
+search    <- seq( 1, 11, 1 )
 model     <- "mple"
 feat      <- "s"
 NN        <- mining( quality~., d, model="mlpe", Runs=Runs, method=method, mpar=mpar, search=search, feat=feat )
