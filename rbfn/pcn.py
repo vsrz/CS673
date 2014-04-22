@@ -41,18 +41,17 @@ class pcn:
 			
 			self.outputs = self.pcnfwd(inputs)
 			self.weights += eta*dot(transpose(inputs),targets-self.outputs)
-			
+
 			# Randomise order of inputs
 			random.shuffle(change)
 			inputs = inputs[change,:]
 			targets = targets[change,:]
-			
+		
 		#return self.weights
 
 	def pcnfwd(self,inputs):
 		""" Run the network forward """
-
-		outputs =  dot(inputs,self.weights)
+		outputs =  dot(inputs,self.weights)		
 		# Threshold the outputs		
 		return outputs
 		#return where(outputs>0,1,0)

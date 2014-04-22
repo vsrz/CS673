@@ -19,13 +19,21 @@ class rbf:
 
     def __init__(self,inputs,targets,nRBF,sigma=0,usekmeans=0,normalise=0):
         self.nin = shape(inputs)[1]
-        #self.nout = shape(targets)[1]        
-        self.nout = 1
+        self.nout = shape(targets)[1]        
         self.ndata = shape(inputs)[0]
         self.nRBF = nRBF
         self.usekmeans = usekmeans
         self.normalise = normalise
         
+        print "Initalizing RBFN with parameters: "
+        print "Inputs   : " + str(shape(inputs))
+        print "targets  : " + str(shape(targets))
+        print "nRBF     : " + str(nRBF)
+        print "Sigma    : " + str(sigma)
+        print "K-Means  : " + str(usekmeans)
+        print "Normalise: " + str(normalise)
+        print
+
         if usekmeans:
             self.kmeansnet = kmeans.kmeans(self.nRBF,inputs)
             
@@ -39,10 +47,10 @@ class rbf:
             self.sigma = sigma
                 
         self.perceptron = pcn.pcn(self.hidden[:,:-1],targets)
-        
+
         # Initialise network
         self.weights1 = zeros((self.nin,self.nRBF))
-        
+
     def rbftrain(self,inputs,targets,eta=0.25,niterations=100):
                 
         if self.usekmeans==0:
@@ -63,6 +71,8 @@ class rbf:
         # Call Perceptron without bias node (since it adds its own)
         self.perceptron.pcntrain(self.hidden[:,:-1],targets,eta,niterations)
         
+
+        
     def rbffwd(self,inputs):
 
         hidden = zeros((shape(inputs)[0],self.nRBF+1))
@@ -74,9 +84,10 @@ class rbf:
             hidden[:,:-1] /= transpose(ones((1,shape(hidden)[0]))*hidden[:,:-1].sum(axis=1))
         
         # Add the bias
-        hidden[:,-1] = -1
+        #hidden[:,-1] = -1
 
         outputs = self.perceptron.pcnfwd(hidden)
+
         return outputs
     
     def confmat(self,inputs,targets):
