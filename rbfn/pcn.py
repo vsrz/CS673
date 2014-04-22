@@ -36,20 +36,16 @@ class pcn:
 		# Add the inputs that match the bias node
 		inputs = concatenate((inputs,-ones((self.nData,1))),axis=1)
 		# Training
-
 		change = range(self.nData)
 		for n in range(nIterations):
 			
-			self.outputs = self.pcnfwd(inputs);
-			print targets
-			z = raw_input()
+			self.outputs = self.pcnfwd(inputs)
 			self.weights += eta*dot(transpose(inputs),targets-self.outputs)
-		
+			
 			# Randomise order of inputs
 			random.shuffle(change)
 			inputs = inputs[change,:]
 			targets = targets[change,:]
-		print self.weights
 			
 		#return self.weights
 

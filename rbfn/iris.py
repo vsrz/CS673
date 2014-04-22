@@ -31,9 +31,10 @@ iris[:,:11] = iris[:,:11]/imax[:11]
 #print target
 #target = zeros((shape(iris)[0],1));
 idx = 0
-target=[]
-for each in iris[:,11]:
-	target.append(each)
+target = zeros((shape(iris)[0],1))
+#print target
+for each in iris:
+	target[idx,0] = iris[idx][11]
 	idx += 1
 #for each in iris[:,11]:
 #	target.append(idx, each)
@@ -75,6 +76,9 @@ testt = iris[:,0:11]
 import rbf
 net = rbf.rbf(train,traint,12,1,1)
 
-net.rbftrain(train,traint,0.25,2000)
+net.rbftrain(train,traint,0.25,3)
+
+output = net.rbffwd(test)
+
 #net.confmat(train,traint)
 #net.confmat(test,testt)
