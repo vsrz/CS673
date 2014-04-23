@@ -97,14 +97,27 @@ output = net.rbffwd(alldata)
 
 print(average(abs(output - alltgts)))
 #exit()
-i = 1
+#i = 1
+#for e in output:
+#	print iris[i][11],
+#	print " -> ",
+#	print e[0]
+#	i += 1
+#	if (i % 10 == 0):
+#		z = raw_input()
+
+f = open('res.csv','w')
+f2 = open('tgts.csv','w')
+cnt = 0
 for e in output:
-	print iris[i][11],
-	print " -> ",
-	print e[0]
-	i += 1
-	if (i % 10 == 0):
-		z = raw_input()
+	for i in range(1,20):
+		f.write(str(e[0]) + str(','))
+	f.write('\n')
+	f2.write(str(iris[cnt][11]) + str('\n'))
+	cnt += 1
+
+f.close()
+f2.close()
 
 #net.confmat(train,traint)
 #net.confmat(test,testt)
