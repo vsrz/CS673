@@ -3,13 +3,13 @@ library (rminer)
 
 # 1599 different red wines
 red_dataset <- read.table("winequality-red.csv",sep=";",header=TRUE)
-d <- red_dataset
-filename <- "RedWine"
+#d <- red_dataset
+#filename <- "RedWine"
 
 # 4898 different white wines
 white_dataset <- read.table("winequality-white.csv",sep=';', header=TRUE)
-#d <- white_dataset
-#filename <- "WhiteWine"
+d <- white_dataset
+filename <- "WhiteWine"
 
 # 100 different white wines
 short_dataset <- read.table("winequality-white-t.csv",sep=';', header=TRUE)
@@ -44,7 +44,6 @@ savemining(NN, paste(filename, "nn", sep="-"))
 savemining(SV, paste(filename, "sv", sep="-"))
 savemining(MR, paste(filename, "mr", sep="-"))
 
-
 ################################################################################
 ##                                                                            ##
 ##                                                                            ##
@@ -52,6 +51,11 @@ savemining(MR, paste(filename, "mr", sep="-"))
 ##                                                                            ##
 ##                                                                            ##
 ################################################################################
+
+# load previously mined datafiles
+NN <- loadmining(paste(filename, "nn", sep="-"))
+SV <- loadmining(paste(filename, "sv", sep="-"))
+MR <- loadmining(paste(filename, "mr", sep="-"))
 
 # define column headings
 heading <- c('fixed acidity',
@@ -78,7 +82,6 @@ graph     <- "REC"
 leg       <- c( "SVM", "NN", "MR" )
 xval      <- 2
 title     <- "Regressive Error Characteristic (REC) Curve"
-
 mgraph( M, graph=graph, leg=leg, xval=xval, main=title)
 
 ################################################################################
