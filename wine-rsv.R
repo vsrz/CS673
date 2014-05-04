@@ -132,7 +132,7 @@ mgraph(MR, graph="VEC", leg=heading, xval=11)
 bar <- table(d[,12])
 barplot(bar, main="Red Wine", xlab="Sensory Preference", col="red")
 
-alc <- table(d[,11])
+alc <- table(data[,11])
 barplot(alc, main="Red Wine", xlab="Alcohol Content", col="red")
 
 # Sorted by column 11
@@ -247,3 +247,39 @@ P <- predict(redcomplete, NN)
 print(mmetric(d, P, "CONF"))
 M
 PNN <- predict(NN, redcomplete)
+
+########################3########################3########################3########################3
+
+badx <- c()
+bady <- c()
+avgx <- c()
+avgy <- c()
+goodx <- c()
+goody <- c()
+
+for (i in 1:length(d[,12]))
+{
+  if (d[i,12] <= 4)
+  {
+    badx <- c(badx, d[i,11])
+    bady <- c(bady, d[i,1])
+    
+  }
+  if (d[i,12] >= 5 & d[i,12] <= 6)
+  {
+    avgx <- c(avgx, d[i,11])
+    avgy <- c(avgy, d[i,1])
+    
+  }
+  if (d[i,12] >= 7)
+  {
+    goodx <- c(goodx, d[i,11])
+    goody <- c(goody, d[i,1])
+    
+  }
+  
+}
+
+plot(badx, bady, col="red", ylab="Fixed Acidity (g/dm^3)", xlab="Alcohol Content (% by Volume)")
+points(avgx,avgy,col="blue")
+points(goodx,goody,col="green")
