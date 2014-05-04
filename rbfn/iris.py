@@ -8,9 +8,10 @@
 
 # Stephen Marsland, 2008
 
+import sys, od
 from numpy import *
 
-iris = loadtxt('winequality-red.csv',delimiter=';')
+iris = loadtxt('winequality-red-headless.csv',delimiter=';')
 #iris_orig = copy(iris)
 #iris[:,:12] = iris[:,:12]-iris[:,:12].mean(axis=0)
 #imax = concatenate((iris.max(axis=0)*ones((1,12)),iris.min(axis=0)*ones((1,12))),axis=0).max(axis=0)
