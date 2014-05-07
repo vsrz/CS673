@@ -74,7 +74,7 @@ heading <- c('fixed acidity',
 ################################################################################
 # Plot the average REC curves
 #
-M         <- vector( "list", 3 )
+M         <- vector( "list", 4 )
 M[[1]]    <- SV
 M[[2]]    <- MR
 M[[3]]    <- NN
@@ -114,50 +114,11 @@ print( mmetric( d$quality, P, "CONF" ))
 
 
 ################################################################################
-# Scatterplot generation
+# Scatterplot creation
 #
 
 ################## White Wine
 d <- white_dataset
-badx <- c()
-bady <- c()
-avgx <- c()
-avgy <- c()
-goodx <- c()
-goody <- c()
-
-for (i in 1:length(d[,12]))
-{
-  if (d[i,12] <= 4)
-  {
-    badx <- c(badx, d[i,11])
-    bady <- c(bady, d[i,10])
-    
-  }
-  if (d[i,12] >= 5 & d[i,12] <= 6)
-  {
-    avgx <- c(avgx, d[i,11])
-    avgy <- c(avgy, d[i,10])
-    
-  }
-  if (d[i,12] >= 7)
-  {
-    goodx <- c(goodx, d[i,11])
-    goody <- c(goody, d[i,10])
-    
-  }
-  
-}
-
-ylab <- "Sulphates (g/dm^3)"
-xlab <- "Alcohol Content (% by Volume)"
-header <- "Rating White Wine Quality Using 2 Inputs"
-plot(badx, bady, col="red", ylab=ylab,  xlab=xlab, main=header)
-points(avgx,avgy,col="blue")
-points(goodx,goody,col="green")
-
-############ Red Wine
-d <- red_dataset
 badx <- c()
 bady <- c()
 avgx <- c()

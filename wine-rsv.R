@@ -249,6 +249,19 @@ M
 PNN <- predict(NN, redcomplete)
 
 ########################3########################3########################3########################3
+M         <- vector( "list", 4 )
+M[[1]]    <- SV
+M[[2]]    <- MR
+M[[3]]    <- NN
+M[[4]]    <- RB
+graph     <- "REC"
+leg       <- c( "SVM", "NN", "MR", "RB" )
+xval      <- 2
+title     <- "Regressive Error Characteristic (REC) Curve"
+mgraph( M, graph=graph, leg=leg, xval=xval, main=title)
+
+# all that is needed is RB$test and RB$pred from the python script
+####################################################################################
 
 badx <- c()
 bady <- c()
