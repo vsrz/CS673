@@ -24,15 +24,15 @@ class rbf:
         self.nRBF = nRBF
         self.usekmeans = usekmeans
         self.normalise = normalise
-        
-        print "Initalizing RBFN with parameters: "
-        print "Inputs   : " + str(shape(inputs))
-        print "targets  : " + str(shape(targets))
-        print "nRBF     : " + str(nRBF)
-        print "Sigma    : " + str(sigma)
-        print "K-Means  : " + str(usekmeans)
-        print "Normalise: " + str(normalise)
-        print
+
+        #print "Initalizing RBFN with parameters: "
+        #print "Inputs   : " + str(shape(inputs))
+        #print "targets  : " + str(shape(targets))
+        #print "nRBF     : " + str(nRBF)
+#        print "Sigma    : " + str(sigma)
+#        print "K-Means  : " + str(usekmeans)
+#        print "Normalise: " + str(normalise)
+#        print
 
         if usekmeans:
             self.kmeansnet = kmeans.kmeans(self.nRBF,inputs)
