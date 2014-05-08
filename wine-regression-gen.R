@@ -43,6 +43,7 @@ SV        <- mining( quality~., d, model="svm", Runs=Runs, method=method, mpar=m
 savemining(NN, paste(filename, "nn", sep="-"))
 savemining(SV, paste(filename, "sv", sep="-"))
 savemining(MR, paste(filename, "mr", sep="-"))
+savemining(RB, paste(filename, "rb", sep="-"))
 
 ################################################################################
 ##                                                                            ##
@@ -56,6 +57,7 @@ savemining(MR, paste(filename, "mr", sep="-"))
 NN <- loadmining(paste(filename, "nn", sep="-"))
 SV <- loadmining(paste(filename, "sv", sep="-"))
 MR <- loadmining(paste(filename, "mr", sep="-"))
+RB <- loadmining(paste(filename, "rb", sep="-"))
 
 # define column headings
 heading <- c('fixed acidity',
@@ -78,11 +80,13 @@ M         <- vector( "list", 4 )
 M[[1]]    <- SV
 M[[2]]    <- MR
 M[[3]]    <- NN
+M[[4]]    <- RB
+
 graph     <- "REC"
-leg       <- c( "SVM", "NN", "MR" )
+leg       <- c( "SVM", "NN", "MR", "RB" )
 xval      <- 2
 title     <- "Regressive Error Characteristic (REC) Curve"
-mgraph( M, graph=graph, leg=leg, xval=xval, main=title)
+mgraph( M, graph=graph, leg=leg, xval=xval, main=title, intbar=0)
 
 ################################################################################
 # Input sensitivity analysis in %
