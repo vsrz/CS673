@@ -25,15 +25,6 @@ class rbf:
         self.usekmeans = usekmeans
         self.normalise = normalise
 
-        #print "Initalizing RBFN with parameters: "
-        #print "Inputs   : " + str(shape(inputs))
-        #print "targets  : " + str(shape(targets))
-        #print "nRBF     : " + str(nRBF)
-#        print "Sigma    : " + str(sigma)
-#        print "K-Means  : " + str(usekmeans)
-#        print "Normalise: " + str(normalise)
-#        print
-
         if usekmeans:
             self.kmeansnet = kmeans.kmeans(self.nRBF,inputs)
             
@@ -84,7 +75,7 @@ class rbf:
             hidden[:,:-1] /= transpose(ones((1,shape(hidden)[0]))*hidden[:,:-1].sum(axis=1))
         
         # Add the bias
-        hidden[:,-1] = -1
+        #hidden[:,-1] = -1
 
         outputs = self.perceptron.pcnfwd(hidden)
 
