@@ -4,7 +4,7 @@ library (rminer)
 # 1599 different red wines
 red_dataset <- read.table("winequality-red.csv",sep=";",header=TRUE)
 #d <- red_dataset
-#filename <- "RedWine"
+filename <- "RedWine"
 
 # 4898 different white wines
 white_dataset <- read.table("winequality-white.csv",sep=';', header=TRUE)
@@ -85,7 +85,8 @@ M[[4]]    <- RB
 graph     <- "REC"
 leg       <- c( "SVM", "NN", "MR", "RB" )
 xval      <- 2
-title     <- "Regressive Error Characteristic (REC) Curve"
+title     <- "Red Regressive Error Characteristic (REC) Curve"
+#title     <- "White Wine Regressive Error Characteristic (REC) Curve"
 mgraph( M, graph=graph, leg=leg, xval=xval, main=title, intbar=0)
 
 ################################################################################

@@ -12,43 +12,41 @@
 import sys, os, rbf
 from numpy import *
 
-data = loadtxt('winequality-red-headless.csv',delimiter=';')
-#data = loadtxt('winequality-white-headless.csv',delimiter=';')
-
 # 1 column with targets
 # target = zeros((shape(data)[0],1))
 
 def genKfold(data):
-        kf_traint = []
-        kf_testt = []
-        kf_train = []
-        kf_test = []
-        for k in range(1,5):
+        train = []
+        test = []
+        train_t = []
+        test_t = []
+        for k in range(1,6):
                 kfold_train = []
                 kfold_test = []
                 kfold_traint = []
                 kfold_testt = []
-                row = 0
-                cnt = 1
+                row = 1
+                cnt = 0
                 for e in data:
-                        if cnt == k:
-                            kfold_test.append(e[0:11])
-                            kfold_testt.append(e[11:12])
+                        if row == k:
+                                kfold_test.append(e[0:11])
+                                kfold_testt.append(e[11:12])
                         else:
-                            kfold_train.append(e[0:11])
-                            kfold_traint.append(e[11:12])
-                        cnt += 1
-                        if (cnt > 5):
-                                cnt = 1
+                                kfold_train.append(e[0:11])
+                                kfold_traint.append(e[11:12])
                         row += 1
-                kf_train.append(kfold_train)
-                kf_test.append(kfold_test)
-                kf_traint.append(kfold_traint)
-                kf_testt.append(kfold_testt)
-                kt = asarray(kf_train)
-                ktt = asarray(kf_traint)
-                ks = asarray(kf_test)
-                kst = asarray(kf_testt)
+                        if (row == 6):
+                                row = 1
+                train.append(asarray(kfold_train))
+                train_t.append(asarray(kfold_traint))
+                test.append(asarray(kfold_test))
+                test_t.append(asarray(kfold_testt))
+                
+                        
+        kt = asarray(train)
+        ktt = asarray(train_t)
+        ks = asarray(test)
+        kst = asarray(test_t)
         return (kt, ktt, ks, kst)
         
 
@@ -106,29 +104,122 @@ def predict(train, traint, test, testt):
                         f.write(each)
                 f.close()
 
-def predictKfold(train, traint, test, testt, runs):
+def genConfMtx():
+        mtx = [[ 0, 4, 5, 6, 7, 8 ] ,
+                [ 4, 0, 0, 0, 0, 0 ] ,
+                [ 5, 0, 0, 0, 0, 0 ] ,
+                [ 6, 0, 0, 0, 0, 0 ] ,
+                [ 7, 0, 0, 0, 0, 0 ] ,
+                [ 8, 0, 0, 0, 0, 0 ]]
+        return mtx
+
+        
+def getConfMtxResult(pred, target, tol=0.5):
+        mtx = genConfMtx()
+        row = -1
+        p = open(pred, 'r')
+        t = open(target, 'r')
+        if pred[0] == 'w':
+                cutoff = 4898
+        else:
+                cutoff = 1599
+        pred = []
+        target = []
+        for each in p:
+                pred.append(float(each))
+        for each in t:
+                target.append(float(each))        
+        for each in range(0,cutoff):
+                row += 1
+                # ignore R-datafile rows
+                if (str(pred[each]).find('.') == -1):
+                        continue
+                # throw out any outliers
+                if (target[each] < 4 or target[each] > 8):
+                        continue
+                if (pred[each] < 4-tol or pred[each] > 8+tol):
+                        continue
+                # row offset
+                row = int(target[each] - 3)
+
+                # col offset
+                for i in range(4,9):
+                        if ((pred[each] > i - tol) and (pred[each] < i + tol)):
+                                col = i - 3
+
+                mtx[row][col] += 1
+        print mtx[0][0]
+        print mtx[0]
+        print mtx[1]
+        print mtx[2]
+        print mtx[3]
+        print mtx[4]
+        print mtx[5]
+
+        return mtx
+
+def predictKfold(train, traint, test, testt, runs, datafile):
         err = []
+        cnt = 0
+        pred = []
+        tgts = []
+        
+        allpred = []
+        alltgt = []
+        # per datafile params
+        if (datafile[0] == 'w'):
+                rowcnt = '4898'
+                outfn = 'ww-'
+        else:
+                rowcnt = '1599'        
+                outfn = 'rw-'
+        
         for res in range(0,runs):
-                tgts = []
-                row = 0
-                for folds in range(0,4):
-                        net = rbf.rbf(train[folds],traint[folds],16,0,0)
+                tgts.append(str(13) + '\n' + str(rowcnt) + str('\n'))
+                pred.append(str(14) + '\n' + str(rowcnt) + str('\n'))
+                for folds in range(0,5):                        
+                        net = rbf.rbf(train[folds],traint[folds],22,0,0)
                         nbf = 2000
-                        net.rbftrain(train[folds],traint[folds],0.0001,nbf)
+                        net.rbftrain(train[folds],traint[folds],0.00001,nbf)
                         output = net.rbffwd(test[folds])
-                        err.append(average(abs(output - testt[folds])))
+                        err.append(average(abs(output - testt[folds])))                        
                         for e in output:
-                                tgts.append(str(e[0]) + str('\n'))
-                        row += 1
-                print average(err)
-        f = open('tgts-' + str(average(err))[0:5] + '.csv','w')
-        f.write(str(14) + '\n' + str(1599) + str('\n'))        
+                                pred.append(str(e[0]) + str('\n'))
+                                allpred.append(e[0])
+                        for e in testt[folds]:
+                                tgts.append(str(e[0])[0] + str('\n'))
+                                alltgt.append (int(str(e[0])[0]))
+        print(average(err))
+        f = open(outfn + 'pred-' + str(average(err))[0:5] + '.csv','w')
+        for each in pred:
+                f.write(each)                
+        f.close()
+        f = open(outfn + 'tgts-' + str(average(err))[0:5] + '.csv','w')
         for each in tgts:
-                f.write(each)
+                f.write(each)                
         f.close()
 
-#findRbfs()
-#findParameters()
-(train, traint, test, testt) = genKfold(data)
-print len(train)
-predictKfold(train, traint, test, testt, 20)
+
+def main():
+        #findRbfs()
+        #findParameters()
+
+        datafile = 'red-headless.csv'
+        #datafile = 'white-headless.csv'
+        data = loadtxt(datafile,delimiter=';')
+
+        #(train, traint, test, testt) = genKfold(data)
+        #predictKfold(train, traint, test, testt, 20, datafile)
+
+        predfile = 'ww-pred.csv'
+        tgtfile = 'ww-tgts.csv'
+        #predfile = 'rw-pred.csv'
+        #tgtfile = 'rw-tgts.csv'
+        T = 1.
+        mtx = getConfMtxResult(predfile, tgtfile, T)
+        pass
+
+if __name__ == "__main__":
+        main()
+
+
