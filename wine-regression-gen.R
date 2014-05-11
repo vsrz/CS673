@@ -85,7 +85,7 @@ M[[4]]    <- RB
 graph     <- "REC"
 leg       <- c( "SVM", "NN", "MR", "RB" )
 xval      <- 2
-title     <- "Red Regressive Error Characteristic (REC) Curve"
+title     <- "Red Wine Regressive Error Characteristic (REC) Curve"
 #title     <- "White Wine Regressive Error Characteristic (REC) Curve"
 mgraph( M, graph=graph, leg=leg, xval=xval, main=title, intbar=0)
 
